@@ -1,0 +1,51 @@
+<html>
+    <head>
+        
+        <link rel="stylesheet" type="text/css" href="./template/form.css"/>
+        <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+        <title>FormValidations</title>
+    
+        <div id="background">
+            <div class="navbar">
+                <h1>Cat Detector</h1>
+              </div>
+
+            <div id="ImageUploadContainer">
+    
+                <div id="inputContainer">
+                    <form action="{{ url_for("gfg")}}" method="post">
+                        <p>
+                            <label for="Firstname">First name</label>
+                            <input id="Firstname" name="Firstname" type="text" placeholder="e.g. Bart" required autocomplete="off">
+                        </p>
+                        <p>
+                            <label for="Lastname">Last Name</label>
+                            <input id="Lastname" name="Lastname" type="text" placeholder="e.g.simpson" required autocomplete="off">
+                        </p>
+                        <div class="upload">
+                            <label >Upload Image</label>
+                            <br>
+                            <input id="uploadImage" name="uploadImage" type='file' onchange="readURL(this);" accept="image/*" />
+                            <br>
+                            <img id="blah" src="#" />
+                        </div>
+                        <br>
+                        <br>
+                        <label>Kind of image choosen:</label>
+                        <br>
+                        <select name="animal" id="animal">
+                            <label for="cat">Kind of image</label>
+                            <option id= "option" value="cat">Cat</option>
+                            <option id= "option" value="dog">Dog</option>
+                            <option id= "option" value="other">Other</option>
+                          </select>
+    
+                        <button type="submit">SUBMIT</button>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </head>
+</html>
