@@ -1,51 +1,215 @@
 <html>
     <head>
-        
-        <link rel="stylesheet" type="text/css" href="./template/form.css"/>
+        <link rel="stylesheet" type="text/css" href="formValid.css"/>
         <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
         <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
         <title>FormValidations</title>
-    
-        <div id="background">
-            <div class="navbar">
+        <script type="text/javascript">
+        $(function() {
+              var string="";
+              var imagesPreview = function(placeToInsertImagePreview) {
+                $(placeToInsertImagePreview).empty();
+                var elems = document.getElementsByClassName("gallery-photo-add");
+                for (i = 0; i < elems.length; i++) {
+                  if (elems[i].files.length != 0) {
+                    var reader = new FileReader();
+                            var id = $(elems[i]).attr('id');
+                    reader.onload = (function(id) {
+                    string=reader.result;
+                      return function(e){
+                        $($.parseHTML('<img>')).attr({
+                          'src' : e.target.result,
+                          'data-id' : id
+                        }).appendTo(placeToInsertImagePreview);
+                      }
+                    })(id);
+
+                    reader.readAsDataURL(elems[i].files[0]);
+                  }
+                }
+              };
+
+              window.reset = function(e) {
+                e.wrap("<form>").closest('form').get(0).reset();
+                e.unwrap();
+              }
+
+              $('div.gallery').on('click', 'img', function() {
+                var id = $(this).attr("data-id");
+                reset($('#'+id));
+                $(this).remove();
+              });
+
+              $('.gallery-photo-add').on('change', function() {
+                imagesPreview('div.gallery');
+              });
+            });
+        </script>
+
+        <style>
+
+            html,
+            body {
+                padding: 0;
+                margin: 0;
+                height: 100%;
+                background-image: url('http://i.stack.imgur.com/kx8MT.gif');
+                background-size: cover;
+            }
+            .title {
+               text-align:center;
+               padding:50px 0 20px;
+              }
+            .title h1{
+                margin:0;
+                padding:0;
+                color:#262626;
+                text-transform:uppercase;
+                font-size:36px;
+                color:red;
+            }
+            .container {
+                width:50%;
+                height:650px;
+                background:linear-gradient(to bottom ,rgb(173 165 111 / 30%)0%,rgb(76 70 60)100%,transparent 50%,transparent 85%);
+                margin:0 auto;
+                border:transparent;
+                box-shadow:0 15px 40px rgba(0,0,0,.5);
+                }
+            .container .leftContainer{
+                float:left;
+                width:50%;
+                height:650px;
+                background:url(http://placekitten.com/200/300?image=12);
+                background-size:cover;
+                box-sizing:border-box;
+            }
+
+            ::-webkit-input-placeholder {
+                color:    #fff;
+            }
+            input, select, textarea{
+                color: #fff;
+            }
+
+            #inputContainer {
+                float:right;
+                width: 50%;
+                height:400px;
+                box-sizing:border-box
+            }
+
+            #inputContainer h2 {
+                text-align: center;
+            }
+
+            #inputContainer input[type="text"],
+            #inputContainer input[type="email"],
+            #inputContainer input[type="password"] {
+                display: block;
+                background-color: transparent;
+                font-weight: bold;
+                border: 0;
+                border-bottom: 1px solid #fff;
+                height: 27px;
+                line-height: 27px;
+                width: 100%;
+            }
+
+            #inputContainer label {
+                color: bisque;
+                font-weight: 600;
+                font-size: 20px;
+                margin-top: 15px;
+                display: block;
+            }
+
+            #inputContainer button {
+                background-color: transparent;
+                border: 2px solid #fff;
+                border-radius: 250px;
+                color: #fff;
+                display: block;
+                font-size: 14px;
+                letter-spacing: 2px;
+                margin: 20px auto;
+                height: 41px;
+                width: 100%;
+            }
+
+            #inputContainer button:hover {
+                cursor: pointer;
+            }
+
+            #animal{
+                background-color:transparent;
+                width: 100;
+                position: relative;
+                border-radius: 100px;
+                height: 30px;
+            }
+            #option{
+                background-color:green;
+            }
+
+            #uploadImage{
+                background: transparent;
+            }
+            #image{
+            color: #a0a0a0;
+            font-size: initial;
+            }
+            #inputContainer p:hover {
+                cursor: pointer;
+            }
+            .gallery img {
+              width: 50%;
+              height: 50%;
+            }
+
+
+        </style>
+        <body>
+            <div class="title">
                 <h1>Cat Detector</h1>
               </div>
 
-            <div id="ImageUploadContainer">
-    
+            <div class="container">
+                <div class="leftContainer"></div>
+
                 <div id="inputContainer">
                     <form action="{{ url_for("gfg")}}" method="post">
                         <p>
                             <label for="Firstname">First name</label>
+                            <br>
                             <input id="Firstname" name="Firstname" type="text" placeholder="e.g. Bart" required autocomplete="off">
                         </p>
                         <p>
                             <label for="Lastname">Last Name</label>
+                            <br>
                             <input id="Lastname" name="Lastname" type="text" placeholder="e.g.simpson" required autocomplete="off">
                         </p>
                         <div class="upload">
                             <label >Upload Image</label>
                             <br>
-                            <input id="uploadImage" name="uploadImage" type='file' onchange="readURL(this);" accept="image/*" />
+                            <input type="file" name='images[]' class="gallery-photo-add" id='image1' />
                             <br>
-                            <img id="blah" src="#" />
                         </div>
-                        <br>
-                        <br>
+                        <div class="gallery"></div>
                         <label>Kind of image choosen:</label>
                         <br>
                         <select name="animal" id="animal">
-                            <label for="cat">Kind of image</label>
+                            <label id="cat">Kind of image</label>
                             <option id= "option" value="cat">Cat</option>
                             <option id= "option" value="dog">Dog</option>
                             <option id= "option" value="other">Other</option>
                           </select>
-    
+
                         <button type="submit">SUBMIT</button>
-                        
+
                     </form>
                 </div>
             </div>
-        </div>
+      </body>
     </head>
 </html>
